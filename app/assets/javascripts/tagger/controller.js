@@ -17,11 +17,12 @@ WALDO.Tagger.controller = (function(){
   };
 
   var setCharacter = function setCharacter(character, coordinates) {
-    model.create(character, coordinates);
+    return model.create(character, coordinates);
   };
 
   var deleteTag = function deleteTag(id) {
-    model.delete(+id);
+    console.log(id);
+    return model.delete(+id);
   };
 
   var callbacks = {

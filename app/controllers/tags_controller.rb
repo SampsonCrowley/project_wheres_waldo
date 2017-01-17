@@ -31,7 +31,7 @@ class TagsController < ApplicationController
   def destroy
     @tag = Tag.find_by(id: params[:id])
     if @tag.destroy
-      render :js
+      render json: { success: true }, status: 200
     else
       render json: { errors: @tag.errors.full_messages }, status: 500
     end

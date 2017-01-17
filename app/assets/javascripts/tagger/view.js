@@ -62,6 +62,7 @@ WALDO.Tagger.view = (function($){
   };
 
   var _deleteTag = function _deleteTag(e){
+    console.log("deleteTag")
     e.stopPropagation();
     var $square = $(e.target).parent();
     callbacks.deleteTag($square.data('id')).then(function(){
@@ -77,14 +78,14 @@ WALDO.Tagger.view = (function($){
   var _renderTag = function _renderTag(tag){
     $newTagSquare = $('<div>')
                       .addClass('frame')
-                      .addClass('active');
+                      .addClass('active')
+                      .css({
+                        top: tag.y - 50,
+                        left: tag.x - 50
+                      })
+                      .attr('data-id', tag.id);
 
-    $newTagSquare.css({
-      top: tag.y,
-      left: tag.x
-    })
-
-    $label = $("<span>")
+    var $label = $("<span>")
               .text(tag.character.name);
     $label.appendTo($newTagSquare)
 

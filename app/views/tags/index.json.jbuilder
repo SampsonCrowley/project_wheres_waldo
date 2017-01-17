@@ -7,4 +7,5 @@
 json.tags(@tags,
             :x,
             :y,
-            :character)
+            :character,
+            :id)

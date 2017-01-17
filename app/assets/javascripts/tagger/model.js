@@ -44,10 +44,10 @@ WALDO.Tagger.model = (function($){
   };
 
   var deleteTag = function deleteTag(id) {
-    $.ajax({
+    return $.ajax({
       url: "/tags/"+id,
       method: "DELETE"
-    })
+    });
   };
 
   return {
