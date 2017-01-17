@@ -1,11 +1,14 @@
 class TagsController < ApplicationController
 
+  skip_before_filter :verify_authenticity_token
+
   def index
     @tags = current_user.tags
   end
 
   def create
-    @tag = Tag.new(tag_params)
+    @current_user = User.find_by(id: session[:user])
+    @tag = @current_user.tags.build(tag_params)
     if @tag.save
       render :js
     else

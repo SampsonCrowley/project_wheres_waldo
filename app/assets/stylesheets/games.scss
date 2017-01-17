@@ -2,6 +2,14 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 .frame {
   border: 3px solid black;
   position: absolute;
@@ -12,6 +20,10 @@
 
 #wrapper {
   position: relative;
+  select {
+    position: absolute;
+    z-index: 105;
+  }
 }
 
 .waldo {
@@ -23,5 +35,5 @@
 }
 
 .dropdown {
-  
+
 }

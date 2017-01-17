@@ -6,7 +6,7 @@ var WALDO = WALDO || {
 
 WALDO.Tagger.view = (function($){
 
-  var $tagSquare, $wrapper, characters, callbacks;
+  var $tagSquare, $wrapper, characters, callbacks, currentTag;
 
   var _createTagSquare = function _createTagSquare() {
     $tagSquare = $('<div>').addClass('frame');
@@ -25,21 +25,39 @@ WALDO.Tagger.view = (function($){
     $wrapper.on('click', _createTag);
   };
 
-  var _createTag = function _createTag() {
+  var _createTag = function _createTag(e) {
+    $wrapper.off();
+    currentTag = { x: e.pageX, y: e.pageY };
+
     var $newTagSquare = $tagSquare.clone();
     $newTagSquare.addClass('active');
+    $newTagSquare.appendTo($wrapper);
+    _createDropdown($newTagSquare);
+  };
 
-    var $dropdown = $('<select>');
+  var _createDropdown = function _createDropdown($newTagSquare) {
+    var $dropdown = $('<select>').css({ left: 0, bottom: 0 });
     _getCharacters().then(function(options) {
       $dropdown.append(options);
     });
+    $dropdown.appendTo($newTagSquare);
+    $dropdown.on('change', _setCharacter);
   };
 
-  var _getCharacters = function _getCharacters(characters) {
-    var options = '';
-    return callbacks.getCharacters().then(function(response) {
-      for (var i = 0; i < response.length; i++) {
-        options += "<option value='" + response[i].id + "'>" + response[i].name + "</option>";
+  var _setCharacter = function _setCharacter(e) {
+    var character = e.target.value;
+    callbacks.setCharacter(character, currentTag);
+    setTimeout(function() {
+      _addCreateTagListener();
+      _addTagListener();
+    }, 100);
+  };
+
+  var _getCharacters = function _getCharacters() {
+    var options = '<option value="--" disabled selected> </option>';
+    return callbacks.getCharacters().then(function(characters) {
+      for (var i = 0; i < characters.length; i++) {
+        options += "<option value='" + characters[i].id + "'>" + characters[i].name + "</option>";
       }
       return options;
     });

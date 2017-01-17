@@ -1,6 +1,6 @@
 var WALDO = WALDO || {
   Tagger: {}
-}
+};
 
 WALDO.Tagger.controller = (function(){
   var model, view;
@@ -11,13 +11,18 @@ WALDO.Tagger.controller = (function(){
     view.init(callbacks);
   };
 
-  var callbacks = {
-    getCharacters: getCharacters
+  var getCharacters = function getCharacters() {
+    return model.characters();
   };
 
-  var getCharacters = function getCharacters() {
-    return model.getCharacters();
+  var setCharacter = function setCharacter(character, coordinates) {
+    model.createTag(character, coordinates);
+  };
+
+  var callbacks = {
+    getCharacters: getCharacters,
+    setCharacter: setCharacter,
   };
 
   return init;
-})()
+})();
