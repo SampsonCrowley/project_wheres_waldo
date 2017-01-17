@@ -24,17 +24,19 @@ body {
     bottom:0;
     left:0;
     width:100%;
+    text-align: center;
+  }
+  select {
+    position: absolute;
+    z-index: 105;
+    width: 100%;
+    bottom: 0;
+    left: 0;
   }
 }
 
 #wrapper {
   position: relative;
-  select {
-    position: absolute;
-    z-index: 105;
-    bottom: 0;
-    left: 0;
-  }
 }
 
 .waldo {

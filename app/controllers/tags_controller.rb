@@ -5,7 +5,8 @@ class TagsController < ApplicationController
   def index
     current_user = User.find_by(id: session[:user])
     @tags = current_user.tags
-    render json: @tags
+    request.format = :json
+    respond_to :json
   end
 
   def create
