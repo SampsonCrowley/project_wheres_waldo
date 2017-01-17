@@ -1,5 +1,5 @@
 var WALDO = WALDO || {
-  Tagger = {}
+  Tagger: {}
 }
 
 WALDO.Tagger.model = (function($){
@@ -18,7 +18,7 @@ WALDO.Tagger.model = (function($){
   }
 
   var getUser = function getUser() {
-    
+
   }
 
 })($)

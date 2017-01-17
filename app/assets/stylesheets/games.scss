@@ -1,3 +1,27 @@
 // Place all the styles related to the Games controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.frame {
+  border: 3px solid black;
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  z-index: 100;
+}
+
+#wrapper {
+  position: relative;
+}
+
+.waldo {
+  position: absolute;
+}
+
+.active {
+  border: 3px solid green;
+}
+
+.dropdown {
+  
+}

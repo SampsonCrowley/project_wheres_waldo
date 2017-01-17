@@ -1,5 +1,5 @@
 var WALDO = WALDO || {
-  Tagger = {}
+  Tagger: {}
 }
 
 WALDO.Tagger.controller = (function(){
@@ -7,7 +7,17 @@ WALDO.Tagger.controller = (function(){
   var init = function(m, v){
     model = m;
     view = v;
-  }
+
+    view.init(callbacks);
+  };
+
+  var callbacks = {
+    getCharacters: getCharacters
+  };
+
+  var getCharacters = function getCharacters() {
+    return model.getCharacters();
+  };
 
   return init;
 })()
