@@ -1,7 +1,11 @@
 class SessionsController < ApplicationController
 
   def new
-    @user = User.new
+    if session[:user]
+      redirect_to game_path
+    else
+      @user = User.new
+    end
   end
 
   def create
