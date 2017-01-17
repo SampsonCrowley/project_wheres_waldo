@@ -24,6 +24,8 @@ WALDO.Tagger.model = (function($){
       url: "/tags",
       method: "GET",
       dataType: "json"
+    }).then(function(resp){
+      return resp.tags
     });
   };
 

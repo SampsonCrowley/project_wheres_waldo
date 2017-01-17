@@ -40,7 +40,7 @@ WALDO.Tagger.view = (function($){
   }
 
   var _createTag = function _createTag(e) {
-    if(e.character_id){
+    if(e.character){
       _renderTag(e);
     } else {
       _cloneTag(e);
@@ -57,6 +57,9 @@ WALDO.Tagger.view = (function($){
       top: tag.y,
       left: tag.x
     })
+    $label = $("<span>")
+              .text(tag.character.name);
+    $label.appendTo($newTagSquare)
 
     $newTagSquare.appendTo($wrapper);
   }
