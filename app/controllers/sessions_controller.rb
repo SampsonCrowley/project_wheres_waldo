@@ -1,7 +1,7 @@
 class SessionsController < ApplicationController
 
   def new
-    if session[:user]
+    if User.find_by(id: session[:user])
       redirect_to game_path
     else
       @user = User.new

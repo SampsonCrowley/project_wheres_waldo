@@ -35,7 +35,7 @@ WALDO.Tagger.model = (function($){
 
   var createTag = function createTag(character, coordinates) {
     var data = "tag[character_id]=" + character + "&tag[x]=" + coordinates.x + "&tag[y]=" + coordinates.y;
-    $.ajax({
+    return $.ajax({
       url: "/tags",
       method: "POST",
       contentType: "application/x-www-form-urlencoded",
@@ -43,10 +43,18 @@ WALDO.Tagger.model = (function($){
     });
   };
 
+  var deleteTag = function deleteTag(id) {
+    $.ajax({
+      url: "/tags/"+id,
+      method: "DELETE"
+    })
+  };
+
   return {
     tags: getTags,
     characters: getCharacters,
-    createTag: createTag,
+    create: createTag,
+    delete: deleteTag
   };
 
 })($);

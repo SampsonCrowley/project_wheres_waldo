@@ -8,12 +8,7 @@ WALDO.Tagger.view = (function($){
 
   var $tagSquare, $wrapper, characters, callbacks, currentTag, $dropdown, $newTagSquare;
 
-  var _createTagSquare = function _createTagSquare() {
-    $tagSquare = $('<div>').addClass('frame');
-    $wrapper.append($tagSquare);
-  };
-
-  var _addTagListener = function _addTagListener() {
+  var _setMoveTagListener = function _setTagListener() {
     $wrapper.on('mousemove', _moveTagSquare);
   };
 
@@ -25,13 +20,30 @@ WALDO.Tagger.view = (function($){
     });
   }
 
+  var _setCreateTagListener = function _addCreateTagListener() {
+    $wrapper.on('click', _createTag);
+  };
+
+  var _setDeleteTagListener = function _deleteTagListener(){
+    $wrapper.on('click', '.frame button.delete-button', _deleteTag)
+  }
+
+  var _setListeners = function _setListeners(){
+    // _setMoveTagListener();
+    _setCreateTagListener();
+    _setCancelListener();
+    _setDeleteTagListener();
+  }
+
+  var _createTagSquare = function _createTagSquare() {
+    $tagSquare = $('<div>').addClass('frame');
+    // $wrapper.append($tagSquare);
+  };
+
   var _moveTagSquare = function _moveTagSquare(e) {
     $tagSquare.css({ left: e.pageX - 50, top: e.pageY - 50 });
   };
 
-  var _addCreateTagListener = function _addCreateTagListener() {
-    $wrapper.on('click', _createTag);
-  };
 
   var _createTags = function _createTags(tags){
     for(var i = 0;i < tags.length; i++){
@@ -40,13 +52,27 @@ WALDO.Tagger.view = (function($){
   }
 
   var _createTag = function _createTag(e) {
+    var $square;
     if(e.character){
-      _renderTag(e);
+      $square = _renderTag(e);
     } else {
-      _cloneTag(e);
+      $square = _cloneTag(e);
     }
+    _addDeleteButton($square);
   };
 
+  var _deleteTag = function _deleteTag(e){
+    e.stopPropagation();
+    var $square = $(e.target).parent();
+    callbacks.deleteTag($square.data('id')).then(function(){
+      $square.remove();
+    })
+  }
+
+  var _addDeleteButton = function _addDeleteButton($square){
+    var a = $('<button>').text('X').addClass('delete-button')
+    $square.append(a);
+  }
 
   var _renderTag = function _renderTag(tag){
     $newTagSquare = $('<div>')
@@ -57,28 +83,31 @@ WALDO.Tagger.view = (function($){
       top: tag.y,
       left: tag.x
     })
+
     $label = $("<span>")
               .text(tag.character.name);
     $label.appendTo($newTagSquare)
 
     $newTagSquare.appendTo($wrapper);
+    return $newTagSquare;
   }
 
   var _cloneTag = function _cloneTag(e){
     $wrapper.off();
     currentTag = { x: e.pageX, y: e.pageY };
 
-    $newTagSquare = $tagSquare.clone();
+    $newTagSquare = $tagSquare.clone().css({ left: e.pageX - 50, top: e.pageY - 50 });
     $newTagSquare.addClass('active');
     $newTagSquare.appendTo($wrapper);
     _createDropdown($newTagSquare);
+    return $newTagSquare;
   }
 
   var _destroyCurrentTag = function _destroyCurrentTag(){
     $dropdown.off();
     $newTagSquare.remove();
-    _addCreateTagListener();
-    _addTagListener();
+    _setCreateTagListener();
+    _setMoveTagListener();
   }
 
   var _createDropdown = function _createDropdown($newTagSquare) {
@@ -91,18 +120,21 @@ WALDO.Tagger.view = (function($){
   };
 
   var _setCharacter = function _setCharacter(e) {
-    var character = e.target.value;
-    callbacks.setCharacter(character, currentTag);
     $dropdown.off();
-    $square = $dropdown.parent();
-    $label = $("<span>")
-              .text($dropdown.children("option:selected").text());
-    $square.append($label);
-    $dropdown.remove();
-    setTimeout(function() {
-      _addCreateTagListener();
-      _addTagListener();
-    },0);
+    var character = e.target.value,
+        $square = $dropdown.parent();
+        $label = $("<span>")
+          .text($dropdown.children("option:selected").text());
+
+    callbacks.setCharacter(character, currentTag).then(function(id){
+      $square.attr("data-id", id);
+        $square.append($label);
+        $dropdown.remove();
+        setTimeout(function() {
+          _setCreateTagListener();
+          _setMoveTagListener();
+        },0);
+    });
   };
 
   var _getCharacters = function _getCharacters() {
@@ -120,9 +152,7 @@ WALDO.Tagger.view = (function($){
     $wrapper = $('#wrapper');
     _createTags(existingTags);
     _createTagSquare();
-    _addTagListener();
-    _addCreateTagListener();
-    _setCancelListener();
+    _setListeners();
   };
 
   return {
