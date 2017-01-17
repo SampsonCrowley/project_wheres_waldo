@@ -1,5 +1,10 @@
-var WALDO = WALDO || {
-  Tagger = {}
-}
+/* global $ */
 
-WALDO.Tagger.view = (function(){})()
+var WALDO = WALDO || {
+  Tagger: {}
+};
+
+WALDO.Tagger.view = (function($){
+
+
+})($);
