@@ -8,10 +8,11 @@ WALDO.Tagger.model = (function($){
   var timer, score, tags, characters, user;
 
   var getCharacters = function getCharacters() {
-    return $.Deferred().resolve([
-      { id: 1, name: "char1"},
-      { id: 2, name: "char2"}
-    ]);
+    return $.ajax({
+      url: "/characters",
+      method: "GET",
+      dataType: "json"
+    });
   };
 
   var getScore = function getScore() {
@@ -19,7 +20,11 @@ WALDO.Tagger.model = (function($){
   };
 
   var getTags = function getTags() {
-
+    return $.ajax({
+      url: "/tags",
+      method: "GET",
+      dataType: "json"
+    });
   };
 
   var getUser = function getUser() {
@@ -37,6 +42,7 @@ WALDO.Tagger.model = (function($){
   };
 
   return {
+    tags: getTags,
     characters: getCharacters,
     createTag: createTag,
   };

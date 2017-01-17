@@ -6,7 +6,7 @@ var WALDO = WALDO || {
 
 WALDO.Tagger.view = (function($){
 
-  var $tagSquare, $wrapper, characters, callbacks, currentTag;
+  var $tagSquare, $wrapper, characters, callbacks, currentTag, $dropdown, $newTagSquare;
 
   var _createTagSquare = function _createTagSquare() {
     $tagSquare = $('<div>').addClass('frame');
@@ -16,6 +16,14 @@ WALDO.Tagger.view = (function($){
   var _addTagListener = function _addTagListener() {
     $wrapper.on('mousemove', _moveTagSquare);
   };
+
+  var _setCancelListener = function _setCancelListener(){
+    $(document).on("keydown", function(e){
+      if(e.which === 27){
+        _destroyCurrentTag();
+      }
+    });
+  }
 
   var _moveTagSquare = function _moveTagSquare(e) {
     $tagSquare.css({ left: e.pageX - 50, top: e.pageY - 50 });
@@ -29,14 +37,21 @@ WALDO.Tagger.view = (function($){
     $wrapper.off();
     currentTag = { x: e.pageX, y: e.pageY };
 
-    var $newTagSquare = $tagSquare.clone();
+    $newTagSquare = $tagSquare.clone();
     $newTagSquare.addClass('active');
     $newTagSquare.appendTo($wrapper);
     _createDropdown($newTagSquare);
   };
 
+  var _destroyCurrentTag = function _destroyCurrentTag(){
+    $dropdown.off();
+    $newTagSquare.remove();
+    _addCreateTagListener();
+    _addTagListener();
+  }
+
   var _createDropdown = function _createDropdown($newTagSquare) {
-    var $dropdown = $('<select>').css({ left: 0, bottom: 0 });
+    $dropdown = $('<select>').css({ left: 0, bottom: 0 });
     _getCharacters().then(function(options) {
       $dropdown.append(options);
     });
@@ -50,7 +65,7 @@ WALDO.Tagger.view = (function($){
     setTimeout(function() {
       _addCreateTagListener();
       _addTagListener();
-    }, 100);
+    },0);
   };
 
   var _getCharacters = function _getCharacters() {
@@ -63,12 +78,13 @@ WALDO.Tagger.view = (function($){
     });
   };
 
-  var init = function(controllerCallbacks) {
+  var init = function(existingTags, controllerCallbacks) {
     callbacks = controllerCallbacks;
     $wrapper = $('#wrapper');
     _createTagSquare();
     _addTagListener();
     _addCreateTagListener();
+    _setCancelListener();
   };
 
   return {

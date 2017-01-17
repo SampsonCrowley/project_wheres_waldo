@@ -7,8 +7,9 @@ WALDO.Tagger.controller = (function(){
   var init = function(m, v){
     model = m;
     view = v;
-
-    view.init(callbacks);
+    model.tags().then(function(tags){
+      view.init(tags, callbacks);
+    })
   };
 
   var getCharacters = function getCharacters() {
