@@ -16,6 +16,15 @@ body {
   height: 100px;
   width: 100px;
   z-index: 100;
+  background: rgba(255,255,255, .4);
+  span {
+    position: absolute;
+    display: block;
+    background: #fff;
+    bottom:0;
+    left:0;
+    width:100%;
+  }
 }
 
 #wrapper {
@@ -23,6 +32,8 @@ body {
   select {
     position: absolute;
     z-index: 105;
+    bottom: 0;
+    left: 0;
   }
 }
 

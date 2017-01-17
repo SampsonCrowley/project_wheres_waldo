@@ -33,7 +33,35 @@ WALDO.Tagger.view = (function($){
     $wrapper.on('click', _createTag);
   };
 
+  var _createTags = function _createTags(tags){
+    for(var i = 0;i < tags.length; i++){
+      _createTag(tags[i]);
+    }
+  }
+
   var _createTag = function _createTag(e) {
+    if(e.character_id){
+      _renderTag(e);
+    } else {
+      _cloneTag(e);
+    }
+  };
+
+
+  var _renderTag = function _renderTag(tag){
+    $newTagSquare = $('<div>')
+                      .addClass('frame')
+                      .addClass('active');
+
+    $newTagSquare.css({
+      top: tag.y,
+      left: tag.x
+    })
+
+    $newTagSquare.appendTo($wrapper);
+  }
+
+  var _cloneTag = function _cloneTag(e){
     $wrapper.off();
     currentTag = { x: e.pageX, y: e.pageY };
 
@@ -41,7 +69,7 @@ WALDO.Tagger.view = (function($){
     $newTagSquare.addClass('active');
     $newTagSquare.appendTo($wrapper);
     _createDropdown($newTagSquare);
-  };
+  }
 
   var _destroyCurrentTag = function _destroyCurrentTag(){
     $dropdown.off();
@@ -51,7 +79,7 @@ WALDO.Tagger.view = (function($){
   }
 
   var _createDropdown = function _createDropdown($newTagSquare) {
-    $dropdown = $('<select>').css({ left: 0, bottom: 0 });
+    $dropdown = $('<select>');
     _getCharacters().then(function(options) {
       $dropdown.append(options);
     });
@@ -62,6 +90,12 @@ WALDO.Tagger.view = (function($){
   var _setCharacter = function _setCharacter(e) {
     var character = e.target.value;
     callbacks.setCharacter(character, currentTag);
+    $dropdown.off();
+    $square = $dropdown.parent();
+    $label = $("<span>")
+              .text($dropdown.children("option:selected").text());
+    $square.append($label);
+    $dropdown.remove();
     setTimeout(function() {
       _addCreateTagListener();
       _addTagListener();
@@ -81,6 +115,7 @@ WALDO.Tagger.view = (function($){
   var init = function(existingTags, controllerCallbacks) {
     callbacks = controllerCallbacks;
     $wrapper = $('#wrapper');
+    _createTags(existingTags);
     _createTagSquare();
     _addTagListener();
     _addCreateTagListener();
