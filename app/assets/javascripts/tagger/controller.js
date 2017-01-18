@@ -17,7 +17,13 @@ WALDO.Tagger.controller = (function(){
   };
 
   var setCharacter = function setCharacter(character, coordinates) {
-    return model.create(character, coordinates);
+    return model.create(character, coordinates).then(function(response) {
+      if (model.checkGameEnd()) {
+        return "Game Over";
+      } else {
+        return response;
+      }
+    });
   };
 
   var deleteTag = function deleteTag(id) {
@@ -28,7 +34,7 @@ WALDO.Tagger.controller = (function(){
   var callbacks = {
     getCharacters: getCharacters,
     setCharacter: setCharacter,
-    deleteTag: deleteTag
+    deleteTag: deleteTag,
   };
 
   return init;

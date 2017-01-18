@@ -67,8 +67,8 @@ WALDO.Tagger.view = (function($){
     var $square = $(e.target).parent();
     callbacks.deleteTag($square.data('id')).then(function(){
       $square.remove();
-    })
-  }
+    });
+  };
 
   var _addDeleteButton = function _addDeleteButton($square){
     var a = $('<button>').text('X').addClass('delete-button')
@@ -128,14 +128,25 @@ WALDO.Tagger.view = (function($){
           .text($dropdown.children("option:selected").text());
 
     callbacks.setCharacter(character, currentTag).then(function(id){
-      $square.attr("data-id", id);
-        $square.append($label);
-        $dropdown.remove();
-        setTimeout(function() {
-          _setCreateTagListener();
-          _setMoveTagListener();
-        },0);
+      if (id === "Game Over") {
+        _gameOverScreen();
+      } else {
+        $square.attr("data-id", id);
+          $square.append($label);
+          $dropdown.remove();
+          setTimeout(function() {
+            _setCreateTagListener();
+            _setMoveTagListener();
+          },0);
+      }
     });
+  };
+
+  var _gameOverScreen = function() {
+    $('<div>')
+      .text("Game Over")
+      .addClass('gameOver')
+      .appendTo('body');
   };
 
   var _getCharacters = function _getCharacters() {

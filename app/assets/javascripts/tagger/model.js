@@ -5,13 +5,16 @@ var WALDO = WALDO || {
 };
 
 WALDO.Tagger.model = (function($){
-  var timer, score, tags, characters, user;
+  var timer, score, tags, characters, user, charsLeft;
 
   var getCharacters = function getCharacters() {
     return $.ajax({
       url: "/characters",
       method: "GET",
       dataType: "json"
+    }).then(function(response) {
+      charsLeft = response.length;
+      return response;
     });
   };
 
@@ -50,11 +53,16 @@ WALDO.Tagger.model = (function($){
     });
   };
 
+  var checkGameEnd = function checkGameEnd() {
+    return charsLeft <= 1;
+  };
+
   return {
     tags: getTags,
     characters: getCharacters,
     create: createTag,
-    delete: deleteTag
+    delete: deleteTag,
+    checkGameEnd: checkGameEnd,
   };
 
 })($);
