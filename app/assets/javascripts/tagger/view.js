@@ -165,6 +165,9 @@ WALDO.Tagger.view = (function($){
     _createTags(existingTags);
     _createTagSquare();
     _setListeners();
+    if(callbacks.checkGameEnd()){
+      _gameOverScreen();
+    }
   };
 
   return {

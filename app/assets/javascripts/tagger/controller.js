@@ -3,13 +3,22 @@ var WALDO = WALDO || {
 };
 
 WALDO.Tagger.controller = (function(){
-  var model, view;
+  var model, view
   var init = function(m, v){
     model = m;
     view = v;
-    model.tags().then(function(tags){
-      view.init(tags, callbacks);
+    var callbacks = {
+      getCharacters: getCharacters,
+      setCharacter: setCharacter,
+      deleteTag: deleteTag,
+      checkGameEnd: model.checkGameEnd
+    };
+    model.characters().then(function(){
+      model.tags().then(function(tags){
+        view.init(tags, callbacks);
+      })
     })
+
   };
 
   var getCharacters = function getCharacters() {
@@ -31,11 +40,7 @@ WALDO.Tagger.controller = (function(){
     return model.delete(+id);
   };
 
-  var callbacks = {
-    getCharacters: getCharacters,
-    setCharacter: setCharacter,
-    deleteTag: deleteTag,
-  };
+
 
   return init;
 })();
