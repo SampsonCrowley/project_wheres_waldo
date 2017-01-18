@@ -21,7 +21,7 @@ WALDO.Tagger.view = (function($){
   }
 
   var _setCreateTagListener = function _addCreateTagListener() {
-    $wrapper.on('click', _createTag);
+    $wrapper.on('click', 'img', _createTag);
   };
 
   var _setDeleteTagListener = function _deleteTagListener(){
